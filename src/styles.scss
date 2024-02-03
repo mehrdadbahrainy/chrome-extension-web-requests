@@ -1,0 +1,19 @@
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+
+html, body {
+  width: 500px;
+  height: 550px;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  height: 100%;
+}
+
+.cdk-global-scrollblock {
+  position: relative !important;
+}

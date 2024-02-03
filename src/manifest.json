@@ -1,0 +1,48 @@
+{
+  "name": "Strawberry",
+  "version": "1.0.0",
+  "description": "Web Request",
+  "manifest_version": 3,
+  "icons": {
+    "32": "assets/icons/icon32.png",
+    "48": "assets/icons/icon48.png"
+  },
+  "action": {
+    "default_title": "Strawberry",
+    "default_popup": "index.html",
+    "default_icon": "assets/icons/icon16.png"
+  },
+  "host_permissions": [
+    "*://*/*"
+  ],
+  "permissions": [
+    "webRequest",
+    "webNavigation",
+    "storage",
+    "tabs",
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "index.html"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "index.html",
+        "assets/icons/*",
+        "main.js",
+        "*.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}
