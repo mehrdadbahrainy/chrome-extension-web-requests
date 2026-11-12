@@ -14,8 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '26'
       - name: Install dependencies
@@ -32,7 +32,7 @@ jobs:
         run: npm run test:e2e
       - name: Upload browser test report on failure
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-results
           path: |
@@ -41,7 +41,7 @@ jobs:
           if-no-files-found: ignore
       - name: Upload installable extension
         if: success()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: web-requests-inspector
           path: dist/chrome-extension/
