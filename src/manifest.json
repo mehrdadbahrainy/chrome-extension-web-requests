@@ -1,48 +1,37 @@
 {
-  "name": "Strawberry",
-  "version": "1.0.0",
-  "description": "Web Request",
   "manifest_version": 3,
-  "icons": {
-    "32": "assets/icons/icon32.png",
-    "48": "assets/icons/icon48.png"
-  },
+  "name": "Web Requests Inspector",
+  "short_name": "Web Requests",
+  "version": "2.0.0",
+  "description": "Inspect HTTP(S) requests from the active browser tab.",
   "action": {
-    "default_title": "Strawberry",
+    "default_title": "Web Requests Inspector",
     "default_popup": "index.html",
-    "default_icon": "assets/icons/icon16.png"
+    "default_icon": {
+      "16": "assets/icons/icon16.png",
+      "32": "assets/icons/icon32.png"
+    }
   },
-  "host_permissions": [
-    "*://*/*"
-  ],
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "32": "assets/icons/icon32.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
+  },
   "permissions": [
     "webRequest",
-    "webNavigation",
     "storage",
-    "tabs",
-    "declarativeNetRequest",
-    "declarativeNetRequestFeedback"
+    "tabs"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
   ],
   "background": {
-    "service_worker": "background.js"
-  },
-  "side_panel": {
-    "default_path": "index.html"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
-  },
-  "web_accessible_resources": [
-    {
-      "resources": [
-        "index.html",
-        "assets/icons/*",
-        "main.js",
-        "*.js"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
-    }
-  ]
+  }
 }

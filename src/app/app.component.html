@@ -1,12 +1,81 @@
-<div class="p-0 m-0 fixed-top">
-  <mat-toolbar color="primary">
-    <span>Web Requests</span>
-  </mat-toolbar>
-</div>
-<div class="flex-fill h-100 py-5">
-  <router-outlet></router-outlet>
-</div>
-<div class="p-0 m-0 fixed-bottom">
-  <mat-toolbar>
-  </mat-toolbar>
-</div>
+<main class="shell">
+  <header class="header">
+    <div class="branding">
+      <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div>
+        <h1>Web Requests</h1>
+        <div class="subtitle">HTTP(S) inspector</div>
+      </div>
+    </div>
+    <button type="button" class="record-button" data-testid="toggle-recording"
+      [class.paused]="!recording()" [disabled]="busy()" (click)="toggleRecording()"
+      [attr.aria-pressed]="recording()">
+      <span class="record-dot"></span>{{ recording() ? 'Recording' : 'Paused' }}
+    </button>
+  </header>
+
+  <section class="context-bar">
+    <div class="tab-context"><span class="eyebrow">ACTIVE TAB</span><span class="tab-title" [title]="tabName()">{{ tabName() }}</span></div>
+    <button type="button" class="clear-button" data-testid="clear" [disabled]="tabId() === null || busy()" (click)="clear()">Clear</button>
+  </section>
+
+  @if (error()) {
+    <div class="notice" role="alert">{{ error() }}</div>
+  }
+
+  <section class="toolbar" aria-label="Request filters">
+    <label class="search-field">
+      <span aria-hidden="true">⌕</span>
+      <input type="search" data-testid="search" placeholder="Filter URLs, status or type..."
+        [value]="search()" (input)="setSearch($event)" aria-label="Filter requests">
+    </label>
+    <select aria-label="Filter HTTP method" data-testid="method-filter" [value]="method()" (change)="setMethod($event)">
+      @for (item of methods; track item) { <option [value]="item">{{ item }}</option> }
+    </select>
+  </section>
+
+  <section class="list-header">
+    <span>Requests <strong data-testid="request-count">{{ filtered().length }}</strong><small> / {{ requests().length }}</small></span>
+    <span class="help-caption">Select a request for details</span>
+  </section>
+
+  <div class="requests" data-testid="request-list">
+    @for (item of filtered(); track item.id) {
+      <button type="button" class="request-row" data-testid="request-row"
+        [class.selected]="selectedId() === item.id" (click)="select(item.id)">
+        <div class="request-top">
+          <span class="method" [class.method-post]="item.method !== 'GET'">{{ item.method }}</span>
+          <span class="request-url">{{ item.url }}</span>
+          <span class="status" data-testid="request-status" [class]="statusClass(item)">{{ statusLabel(item) }}</span>
+        </div>
+        <div class="request-bottom"><span>{{ item.type }}</span><span>{{ formatTime(item.startedAt) }}</span><span>{{ formatDuration(item.durationMs) }}</span></div>
+      </button>
+    } @empty {
+      <div class="empty-state">
+        <div class="empty-icon" aria-hidden="true">⇄</div>
+        <strong>{{ requests().length ? 'No matching requests' : 'Waiting for network activity' }}</strong>
+        <p>{{ requests().length ? 'Try another search or method.' : 'Refresh the active tab or trigger an API request to see it here.' }}</p>
+      </div>
+    }
+  </div>
+
+  @if (selected(); as details) {
+    <section class="details" data-testid="details">
+      <div class="details-header">
+        <h2>Request details</h2>
+        <button type="button" class="close-button" aria-label="Close details" (click)="selectedId.set(null)">×</button>
+      </div>
+      <div class="details-grid">
+        <div><label>Method</label><strong>{{ details.method }}</strong></div>
+        <div><label>Status</label><strong [class]="statusClass(details)">{{ statusLabel(details) }}</strong></div>
+        <div><label>Duration</label><strong>{{ formatDuration(details.durationMs) }}</strong></div>
+        <div><label>Resource</label><strong>{{ details.type }}</strong></div>
+      </div>
+      <div class="details-field"><label>Request URL</label><code data-testid="request-url">{{ details.url }}</code></div>
+      @if (details.initiator) { <div class="details-field"><label>Initiator</label><code>{{ details.initiator }}</code></div> }
+      @if (details.error) { <div class="details-field"><label>Network error</label><code>{{ details.error }}</code></div> }
+    </section>
+  }
+
+  <footer>Session-only history · max 200 requests per tab · no bodies or headers stored</footer>
+</main>

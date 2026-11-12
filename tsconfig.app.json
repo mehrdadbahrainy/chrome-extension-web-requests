@@ -1,21 +1,12 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./out-tsc/app",
-    "types": [
-      "@angular/localize",
-      "chrome"
-    ]
+    "outDir": "./out-tsc/app"
   },
   "files": [
-    "src/main.ts",
+    "src/main.ts"
   ],
   "include": [
-    "src/**/*.ts",
     "src/**/*.d.ts"
-  ],
-  "exclude": [
-    "node_modules"
   ]
 }
