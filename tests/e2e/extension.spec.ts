@@ -71,3 +71,74 @@ test('records requests, redacts tokens, filters, pauses and clears history', asy
   await site.close();
   await popup.close();
 });
+
+test('v2.1 advanced filters combine domain, HTTP status, type, method and regex', async () => {
+  const site = await context.newPage();
+  await site.goto('http://127.0.0.1:4173/');
+  const tabId = await worker.evaluate(async () => {
+    const tabs = await chrome.tabs.query({});
+    return tabs.find(tab => tab.url?.startsWith('http://127.0.0.1:4173/'))?.id ?? -1;
+  });
+  expect(tabId).toBeGreaterThan(0);
+
+  await site.evaluate(async () => {
+    await fetch('/api/ping?token=hidden');
+    await fetch('/api/missing');
+    await fetch('/api/fail');
+    await fetch('/api/submit', { method: 'POST' });
+  });
+
+  await expect.poll(async () => worker.evaluate(async id => {
+    const stored = await chrome.storage.session.get('requestsByTab');
+    return (stored.requestsByTab?.[String(id)] ?? []).filter((row: { url: string }) => row.url.includes('/api/')).length;
+  }, tabId)).toBe(4);
+
+  const popup = await context.newPage();
+  await popup.goto('chrome-extension://' + extensionId + '/index.html?tabId=' + tabId);
+  const rows = popup.getByTestId('request-row');
+  await popup.getByTestId('search').fill('/api/');
+  await expect(rows).toHaveCount(4);
+
+  await popup.getByTestId('domain-filter').fill('example.com');
+  await expect(rows).toHaveCount(0);
+  await popup.getByTestId('domain-filter').fill('127.0.0.1');
+  await expect(rows).toHaveCount(4);
+
+  await popup.getByTestId('status-filter').selectOption('4xx');
+  await expect(rows).toHaveCount(1);
+  await expect(rows.first()).toContainText('/api/missing');
+  await popup.getByTestId('status-filter').selectOption('5xx');
+  await expect(rows).toHaveCount(1);
+  await expect(rows.first()).toContainText('/api/fail');
+  await popup.getByTestId('status-filter').selectOption('errors');
+  await expect(rows).toHaveCount(2);
+  await popup.getByTestId('status-filter').selectOption('2xx');
+  await expect(rows).toHaveCount(2);
+
+  await popup.getByTestId('status-filter').selectOption('ALL');
+  await popup.getByTestId('type-filter').selectOption('xmlhttprequest');
+  await expect(rows).toHaveCount(4);
+  await popup.getByTestId('method-filter').selectOption('POST');
+  await expect(rows).toHaveCount(1);
+  await expect(rows.first()).toContainText('/api/submit');
+
+  await popup.getByTestId('method-filter').selectOption('ALL');
+  await popup.getByTestId('regex-toggle').check();
+  await popup.getByTestId('search').fill('/api/(missing|fail)$');
+  await expect(rows).toHaveCount(2);
+  await popup.getByTestId('search').fill('[');
+  await expect(popup.getByTestId('regex-error')).toContainText('Invalid regular expression');
+  await expect(rows).toHaveCount(0);
+
+  await popup.getByTestId('reset-filters').click();
+  await expect(popup.getByTestId('regex-error')).toHaveCount(0);
+  await expect(popup.getByTestId('search')).toHaveValue('');
+  await expect(popup.getByTestId('domain-filter')).toHaveValue('');
+  await expect(popup.getByTestId('method-filter')).toHaveValue('ALL');
+  await expect(popup.getByTestId('status-filter')).toHaveValue('ALL');
+  await expect(popup.getByTestId('type-filter')).toHaveValue('ALL');
+  await expect(popup.getByTestId('regex-toggle')).not.toBeChecked();
+  await expect(rows).not.toHaveCount(0);
+  await site.close();
+  await popup.close();
+});
