@@ -45,7 +45,7 @@ test('records requests, redacts tokens, filters, pauses and clears history', asy
 
   const popup = await context.newPage();
   await popup.goto('chrome-extension://' + extensionId + '/index.html?tabId=' + tabId);
-  await expect(popup.getByRole('heading', { name: 'Web Requests' })).toBeVisible();
+  await expect(popup.getByRole('heading', { name: 'Reqlyst' })).toBeVisible();
   await popup.getByTestId('search').fill('/api/');
   await expect(popup.getByTestId('request-row')).toHaveCount(2);
   await expect(popup.getByText('404', { exact: true })).toBeVisible();

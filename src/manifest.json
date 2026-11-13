@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "Web Requests Inspector",
-  "short_name": "Web Requests",
-  "version": "2.1.0",
-  "description": "Inspect HTTP(S) requests from the active browser tab.",
+  "name": "Reqlyst — Web Request Inspector",
+  "short_name": "Reqlyst",
+  "version": "2.1.1",
+  "description": "Inspect and filter HTTP(S) requests from your current browser tab.",
   "action": {
-    "default_title": "Web Requests Inspector",
+    "default_title": "Reqlyst — Inspect requests",
     "default_popup": "index.html",
     "default_icon": {
       "16": "assets/icons/icon16.png",

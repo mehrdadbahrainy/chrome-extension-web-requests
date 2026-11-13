@@ -6,7 +6,7 @@ let queue = Promise.resolve();
 
 function serialize(work) {
   const job = queue.then(work);
-  queue = job.catch(error => console.error('Web Requests Inspector:', error));
+  queue = job.catch(error => console.error('Reqlyst:', error));
   return job;
 }
 

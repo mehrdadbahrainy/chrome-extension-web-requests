@@ -1,7 +1,7 @@
 name: Build and E2E
 on:
   push:
-    branches: [main, chore/modernize-extension-and-e2e]
+    branches: [main, feat/reqlyst-branding-store-ready]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -45,3 +45,15 @@ jobs:
         with:
           name: web-requests-inspector
           path: dist/chrome-extension/
+
+      - name: Prepare Chrome Web Store upload ZIP
+        if: success()
+        run: |
+          cd dist/chrome-extension
+          zip -qr ../reqlyst-chrome-web-store.zip .
+      - name: Upload Chrome Web Store ZIP
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: reqlyst-chrome-web-store
+          path: dist/reqlyst-chrome-web-store.zip

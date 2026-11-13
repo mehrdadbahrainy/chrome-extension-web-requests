@@ -1,4 +1,4 @@
-# Web Requests Inspector
+# Reqlyst — Web Request Inspector
 
 **A lightweight, privacy-conscious Chrome extension for inspecting HTTP(S) request metadata.**
 
@@ -6,11 +6,17 @@
 
 ---
 
+![Reqlyst app icon](src/assets/icons/icon128.png)
+
+**Brand:** Reqlyst (رک‌لیست) · **Version:** 2.1.1
+
+**Chrome Web Store:** The extension package and bilingual listing draft are available in [the publishing guide](docs/CHROME_WEB_STORE.md). The extension has **not yet been submitted to the Chrome Web Store**.
+
 ## English
 
 ### Overview
 
-Web Requests Inspector helps developers understand which HTTP(S) requests a browser tab makes without switching to a larger debugging tool. It captures network activity through a Chrome Manifest V3 background service worker and presents a compact, searchable request list in the extension popup.
+Reqlyst helps developers understand which HTTP(S) requests a browser tab makes without switching to a larger debugging tool. It captures network activity through a Chrome Manifest V3 background service worker and presents a compact, searchable request list in the extension popup.
 
 This repository was modernized from an Angular 16 prototype to **Angular 22**. The current implementation uses the **Manifest V3**, **Angular standalone components and signals**, and automated **Chromium end-to-end testing with Playwright**.
 
@@ -149,7 +155,7 @@ Issues and pull requests are welcome. Describe reproduction steps and include te
 
 ### معرفی پروژه
 
-**Web Requests Inspector** یک افزونه سبک برای مرورگر کروم است که به توسعه‌دهندگان امکان می‌دهد درخواست‌های HTTP و HTTPS مربوط به تب فعال را بررسی کنند. این افزونه اطلاعات درخواست‌های شبکه را در پس‌زمینه ثبت می‌کند و در یک پنجره ساده و قابل جست‌وجو نمایش می‌دهد.
+**Reqlyst** یک افزونه سبک برای مرورگر کروم است که به توسعه‌دهندگان امکان می‌دهد درخواست‌های HTTP و HTTPS مربوط به تب فعال را بررسی کنند. این افزونه اطلاعات درخواست‌های شبکه را در پس‌زمینه ثبت می‌کند و در یک پنجره ساده و قابل جست‌وجو نمایش می‌دهد.
 
 پروژه از نسخه اولیه Angular 16 به **Angular 22** ارتقا یافته و از **Chrome Manifest V3**، کامپوننت‌های مستقل و Signalهای انگولار و تست‌های **Playwright** در مرورگر Chromium استفاده می‌کند.
 
