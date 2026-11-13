@@ -23,15 +23,57 @@
     <div class="notice" role="alert">{{ error() }}</div>
   }
 
-  <section class="toolbar" aria-label="Request filters">
-    <label class="search-field">
-      <span aria-hidden="true">⌕</span>
-      <input type="search" data-testid="search" placeholder="Filter URLs, status or type..."
-        [value]="search()" (input)="setSearch($event)" aria-label="Filter requests">
-    </label>
-    <select aria-label="Filter HTTP method" data-testid="method-filter" [value]="method()" (change)="setMethod($event)">
-      @for (item of methods; track item) { <option [value]="item">{{ item }}</option> }
-    </select>
+  <section class="filters" aria-label="Request filters">
+    <div class="toolbar">
+      <label class="search-field">
+        <span aria-hidden="true">⌕</span>
+        <input type="search" data-testid="search" placeholder="Search requests..."
+          [value]="search()" (input)="setSearch($event)" aria-label="Search requests">
+      </label>
+      <label class="regex-toggle" title="Treat the search as a regular expression">
+        <input type="checkbox" data-testid="regex-toggle" [checked]="regex()" (change)="setRegex($event)">
+        Regex
+      </label>
+      <select aria-label="Filter HTTP method" data-testid="method-filter"
+        [value]="method()" (change)="setMethod($event)">
+        @for (item of methods; track item) { <option [value]="item">{{ item }}</option> }
+      </select>
+    </div>
+    <div class="advanced-toolbar">
+      <label class="domain-field">
+        <span>Domain</span>
+        <input type="text" data-testid="domain-filter" placeholder="example.com"
+          aria-label="Filter by domain" [value]="domain()" (input)="setDomain($event)">
+      </label>
+      <label class="select-field">
+        <span>Status</span>
+        <select data-testid="status-filter" aria-label="Filter HTTP status"
+          [value]="statusFilter()" (change)="setStatus($event)">
+          <option value="ALL">All</option>
+          <option value="errors">Errors (4xx/5xx + network)</option>
+          <option value="1xx">1xx</option>
+          <option value="2xx">2xx</option>
+          <option value="3xx">3xx</option>
+          <option value="4xx">4xx</option>
+          <option value="5xx">5xx</option>
+          <option value="pending">Pending</option>
+          <option value="failed">Network failures</option>
+        </select>
+      </label>
+      <label class="select-field">
+        <span>Type</span>
+        <select data-testid="type-filter" aria-label="Filter resource type"
+          [value]="resourceType()" (change)="setResourceType($event)">
+          <option value="ALL">All types</option>
+          @for (type of requestTypes(); track type) { <option [value]="type">{{ type }}</option> }
+        </select>
+      </label>
+      <button type="button" class="reset-button" data-testid="reset-filters"
+        [disabled]="!hasActiveFilters()" (click)="resetFilters()">Reset</button>
+    </div>
+    @if (regexError()) {
+      <div role="alert" class="filter-error" data-testid="regex-error">{{ regexError() }}</div>
+    }
   </section>
 
   <section class="list-header">
