@@ -2,9 +2,6 @@
 .shell { display: flex; flex-direction: column; height: 100%; min-height: 0; background: #101827; color: #e8eef8; }
 .header { display: flex; align-items: center; justify-content: space-between; padding: 19px 20px 15px; border-bottom: 1px solid #253347; }
 .branding { display: flex; align-items: center; gap: 12px; }
-.brand-mark { width: 34px; height: 34px; display: flex; align-items: center; justify-content: space-evenly; border-radius: 10px; background: #283f62; }
-.brand-mark span { display: block; width: 4px; border-radius: 10px; background: #ff9c57; }
-.brand-mark span:nth-child(1) { height: 11px; }.brand-mark span:nth-child(2) { height: 19px; }.brand-mark span:nth-child(3) { height: 13px; }
 h1 { font-size: 16px; margin: 0; letter-spacing: -.3px; font-weight: 700; }
 .subtitle { margin-top: 2px; font-size: 11px; color: #93a5bb; }
 button, select, input { font: inherit; }
@@ -70,3 +67,5 @@ footer { border-top: 1px solid #273549; padding: 10px 12px; text-align: center; 
 .reset-button { height: 31px; border: 1px solid #40536e; background: #1d2e47; color: #d1e0ee; padding: 0 9px; border-radius: 7px; font-size: 11px; }
 .reset-button:hover:not(:disabled) { background: #2e4765; }
 .filter-error { margin: 8px 20px 0; border: 1px solid #a45f44; border-radius: 7px; background: #432c28; color: #ffd4bd; padding: 7px 9px; font-size: 11px; }
+
+.brand-icon { width: 36px; height: 36px; flex-shrink: 0; display: block; border-radius: 9px; }

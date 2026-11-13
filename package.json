@@ -1,6 +1,6 @@
 {
-  "name": "web-requests-inspector",
-  "version": "2.1.0",
+  "name": "reqlyst",
+  "version": "2.1.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -30,6 +30,6 @@
     "typescript": "~6.0.0"
   },
   "engines": {
-    "node": ">=22.22.3"
+    "node": ">=22.22.3 <23 || >=24.15.0 <25 || >=26.0.0 <27"
   }
 }
