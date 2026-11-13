@@ -56,3 +56,17 @@ select { color: #d3e0ee; background: #19263a; border: 1px solid #344660; border-
 .details-field { margin-top: 12px; }
 .details code { display: block; font-family: ui-monospace, monospace; font-size: 11px; line-height: 1.5; margin-top: 6px; padding: 9px; background: #101b2b; border-radius: 6px; color: #d9e8f7; overflow-wrap: anywhere; user-select: text; }
 footer { border-top: 1px solid #273549; padding: 10px 12px; text-align: center; color: #7890a9; font-size: 10px; }
+
+
+/* Version 2.1: compact advanced filtering controls. */
+.filters { padding-bottom: 6px; }
+.filters .toolbar { padding-bottom: 8px; }
+.regex-toggle { display: flex; align-items: center; gap: 5px; align-self: stretch; color: #bdcfe3; font-size: 11px; cursor: pointer; white-space: nowrap; }
+.regex-toggle input { accent-color: #ff9854; cursor: pointer; }
+.advanced-toolbar { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 1fr) auto; gap: 7px; align-items: end; padding: 0 20px; }
+.domain-field, .select-field { display: flex; flex-direction: column; gap: 4px; min-width: 0; color: #91a8c1; font-size: 10px; }
+.domain-field input, .select-field select { display: block; width: 100%; min-width: 0; height: 31px; border-radius: 7px; padding: 0 7px; border: 1px solid #344660; color: #e5edf7; background: #19263a; font-size: 11px; }
+.domain-field input::placeholder { color: #7187a0; }
+.reset-button { height: 31px; border: 1px solid #40536e; background: #1d2e47; color: #d1e0ee; padding: 0 9px; border-radius: 7px; font-size: 11px; }
+.reset-button:hover:not(:disabled) { background: #2e4765; }
+.filter-error { margin: 8px 20px 0; border: 1px solid #a45f44; border-radius: 7px; background: #432c28; color: #ffd4bd; padding: 7px 9px; font-size: 11px; }

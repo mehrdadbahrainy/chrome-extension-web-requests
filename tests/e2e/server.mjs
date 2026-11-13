@@ -11,6 +11,16 @@ const server = createServer((req, res) => {
     res.end(JSON.stringify({ error: 'Not found' }));
     return;
   }
+  if (req.url?.startsWith('/api/fail')) {
+    res.writeHead(503, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Unavailable' }));
+    return;
+  }
+  if (req.url?.startsWith('/api/submit')) {
+    res.writeHead(201, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ created: true }));
+    return;
+  }
   res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
   res.end('<!doctype html><html><head><title>E2E target</title></head><body><h1>Request fixture</h1></body></html>');
 });

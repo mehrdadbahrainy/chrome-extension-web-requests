@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, computed, signal } from '@angular/core';
+import { filterRequests, getRegexError } from '../request-filters.js';
 
 interface RequestRecord {
   id: string;
@@ -34,20 +35,31 @@ export class AppComponent implements OnInit, OnDestroy {
   readonly recording = signal(true);
   readonly search = signal('');
   readonly method = signal('ALL');
+  readonly domain = signal('');
+  readonly statusFilter = signal('ALL');
+  readonly resourceType = signal('ALL');
+  readonly regex = signal(false);
+  readonly requestTypes = computed(() => [...new Set(this.requests().map(item => item.type))].sort());
+  readonly regexError = computed(() => getRegexError(this.search(), this.regex()));
+  readonly hasActiveFilters = computed(() =>
+    this.search() !== '' || this.method() !== 'ALL' || this.domain() !== '' ||
+    this.statusFilter() !== 'ALL' || this.resourceType() !== 'ALL' || this.regex()
+  );
   readonly selectedId = signal<string | null>(null);
   readonly error = signal('');
   readonly busy = signal(false);
   readonly methods = ['ALL', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'];
 
-  readonly filtered = computed(() => {
-    const query = this.search().trim().toLowerCase();
-    const method = this.method();
-    return this.requests().filter(item =>
-      (method === 'ALL' || item.method === method) &&
-      (!query || [item.url, item.method, item.type, item.status, String(item.statusCode ?? '')]
-        .some(value => value.toLowerCase().includes(query)))
-    ).sort((a, b) => b.startedAt - a.startedAt);
-  });
+  readonly filtered = computed(() =>
+    filterRequests(this.requests(), {
+      search: this.search(),
+      regex: this.regex(),
+      method: this.method(),
+      domain: this.domain(),
+      resourceType: this.resourceType(),
+      statusFilter: this.statusFilter()
+    }).sort((a, b) => b.startedAt - a.startedAt)
+  );
 
   readonly selected = computed(() =>
     this.requests().find(item => item.id === this.selectedId()) ?? null
@@ -156,6 +168,31 @@ export class AppComponent implements OnInit, OnDestroy {
 
   setMethod(event: Event): void {
     this.method.set((event.target as HTMLSelectElement).value);
+  }
+
+  setDomain(event: Event): void {
+    this.domain.set((event.target as HTMLInputElement).value);
+  }
+
+  setStatus(event: Event): void {
+    this.statusFilter.set((event.target as HTMLSelectElement).value);
+  }
+
+  setResourceType(event: Event): void {
+    this.resourceType.set((event.target as HTMLSelectElement).value);
+  }
+
+  setRegex(event: Event): void {
+    this.regex.set((event.target as HTMLInputElement).checked);
+  }
+
+  resetFilters(): void {
+    this.search.set('');
+    this.method.set('ALL');
+    this.domain.set('');
+    this.statusFilter.set('ALL');
+    this.resourceType.set('ALL');
+    this.regex.set(false);
   }
 
   select(id: string): void {
