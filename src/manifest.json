@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Web Requests Inspector",
   "short_name": "Web Requests",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Inspect HTTP(S) requests from the active browser tab.",
   "action": {
     "default_title": "Web Requests Inspector",
