@@ -1,0 +1,5 @@
+* { box-sizing: border-box; }
+html, body { width: 540px; height: 620px; min-width: 300px; padding: 0; margin: 0; background: #101827; }
+body { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; font-size: 13px; }
+:focus-visible { outline: 2px solid #ff9854; outline-offset: 2px; }
+::selection { background: #d57640; color: white; }

@@ -1,0 +1,47 @@
+name: Build and E2E
+on:
+  push:
+    branches: [main, chore/modernize-extension-and-e2e]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '26'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Unit tests
+        run: npm run test:unit
+      - name: Build unpacked Chrome extension
+        run: npm run build
+      - name: Validate extension bundle
+        run: node scripts/verify-build.mjs
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps --no-shell chromium
+      - name: End-to-end tests in Chromium
+        run: npm run test:e2e
+      - name: Upload browser test report on failure
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-results
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+      - name: Upload installable extension
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: web-requests-inspector
+          path: dist/chrome-extension/
